@@ -30,7 +30,10 @@ function Random() {
             //call choseRandomProject that will return the id of a random project
             let random = await choseRandomProject(numberOfProjects);
             //do axios call for a specific project 
-            let newUrl = urlStart +'projects/' + random + '?api_key=' + api_key;
+
+            //go into result.data.projects.project and grab the id number of the project from the array of all the active projects 
+            let projectId = result.data.projects.project[random].id;
+            let newUrl = urlStart +'projects/' + projectId + '?api_key=' + api_key;
             let singleResult = await axios.get(newUrl);
             //console.log('chosen project', singleResult);
             setChosenProject(singleResult.data.project);
