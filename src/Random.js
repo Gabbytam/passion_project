@@ -8,6 +8,9 @@ const api_key = 'bc212140-0729-4c60-a886-a9b73c05ea49';
 function Random() {
     const [projectData, setProjectData] = useState([]);
     const [chosenProject, setChosenProject] = useState('');
+    const [seeDetails, setSeeDetails] = useState(false);
+    const [buttonWords, setButtonWords] = useState(0);
+    const showHideWords = ['See', 'Hide'];
 
     useEffect(() => {
         getProjects();
@@ -51,11 +54,20 @@ function Random() {
 
     console.log('chosen project', chosenProject);
 
+    const handleDetails = () => {
+        setSeeDetails(!seeDetails);
+        let showHide = buttonWords === 0 ? 1 : 0;
+        setButtonWords(showHide);
+    }
+
     return (
         <div>
             <h1>Randomized donation</h1>
-            <button>See Details</button>
-            <Details project = {chosenProject}/>
+            <button onClick= {(e) => handleDetails()}>{showHideWords[buttonWords]} Details</button>
+            {seeDetails &&
+                <Details project = {chosenProject}/>
+            }
+            
             
         </div>
     )
