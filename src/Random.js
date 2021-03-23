@@ -1,6 +1,18 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import Details from './Details';
+import {
+    Grid,
+    GridItem,
+    Image,
+    Box,
+    Button,
+    ButtonGroup,
+    extendTheme,
+    ChakraProvider,
+    useColorMode,
+    colorMode,
+  } from "@chakra-ui/react";
 
 const urlStart = 'https://api.globalgiving.org/api/public/projectservice/';
 const api_key = 'bc212140-0729-4c60-a886-a9b73c05ea49';
@@ -11,6 +23,7 @@ function Random() {
     const [seeDetails, setSeeDetails] = useState(false);
     const [buttonWords, setButtonWords] = useState(0);
     const showHideWords = ['See', 'Hide'];
+    const [run, setRun] = useState(false);
 
     useEffect(() => {
         getProjects();
@@ -20,15 +33,13 @@ function Random() {
     const getProjects = async () => {
         try {
             //initial call for 10 can be used for the slot machine
-            // let result = await axios.get(urlStart + 'all/projects/active?api_key=' + api_key);
-            // console.log(result.data)
-            // setProjectData(result.data);
-            // //call choseRandomProject
-            // choseRandomProject();
+            let allResult = await axios.get(urlStart + 'all/projects/active?api_key=' + api_key);
+            //console.log('grab 10', allResult.data.projects.project)
+            setProjectData(allResult.data.projects.project);
+            console.log('project data before', projectData)
 
             //do this call the see how many active projects there are 
             let result = await axios.get(urlStart + 'all/projects/active/ids?api_key=' + api_key);
-            console.log(result.data.projects)
             let numberOfProjects = result.data.projects.numberFound;
             //call choseRandomProject that will return the id of a random project
             let random = await choseRandomProject(numberOfProjects);
@@ -40,11 +51,18 @@ function Random() {
             let singleResult = await axios.get(newUrl);
             //console.log('chosen project', singleResult);
             setChosenProject(singleResult.data.project);
+            let slotProjects = allResult.data.projects.project;
+            slotProjects.push(singleResult.data.project);
+            setProjectData(slotProjects);
+
+
         } 
         catch(err) {
             console.log('axios call for projects error', err)
         }
     }
+
+    console.log('project data AFTER', projectData)
 
     //function that will pick a project at random and set the chosenProject
     const choseRandomProject = (num) => {
@@ -52,23 +70,49 @@ function Random() {
         return randomNum;
     }
 
-    console.log('chosen project', chosenProject);
-
     const handleDetails = () => {
         setSeeDetails(!seeDetails);
         let showHide = buttonWords === 0 ? 1 : 0;
         setButtonWords(showHide);
     }
 
+    //function that will run the set time out for the slot machine 
+    const runSlotMachine = () => {
+        setRun(true);
+        
+        //once the slotmachine is done running, display the title and the image, have the see details button appear 
+
+    }
+
     return (
         <div>
-            <h1>Randomized donation</h1>
-            <button onClick= {(e) => handleDetails()}>{showHideWords[buttonWords]} Details</button>
-            {seeDetails &&
-                <Details project = {chosenProject}/>
-            }
+            <Grid background='orange' width='80vw' display='flex' flexDirection='column'>
+                <Box as='h1' fontSize='xxx-large'>We will pick a project for you</Box>
+                <Box width='50%' height='30vh' background='grey' borderRadius='25px'>
+                    {!run ?
+                        <Box>
+                            <Box as='h1' color='white' fontSize='xxx-large' opacity='.2'>?????</Box>
+                            <Box as='h1' color='white' fontSize='xxx-large'>?????</Box>
+                            <Box as='h1' color='white' fontSize='xxx-large' opacity='.2'>?????</Box>
+                        </Box>
+                        :
+                        <Box>
+                            <Box as='h1' color='white' fontSize='small'>{projectData[0].title}</Box>
+                            <Box as='h1' color='white' fontSize='small'>{projectData[1].title}</Box>
+                            <Box as='h1' color='white' fontSize='small'>{projectData[2].title}</Box>
+                        </Box>
+                    }
+                    
+
+                </Box>
+                <Button onClick={(e) => runSlotMachine()}>Run</Button>
+                <Button onClick= {(e) => handleDetails()} w="10vw">{showHideWords[buttonWords]} Details</Button>
+                {seeDetails &&
+                    <Details project = {chosenProject}/>
+                }
+            </Grid>
             
-            
+
         </div>
     )
 }
