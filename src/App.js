@@ -7,6 +7,7 @@ import './css/App.css';
 import Layout from './Layout';
 import Home from './Home';
 import Random from './Random';
+import Categories from './Categories';
 
 function App() {
   return (
@@ -14,7 +15,8 @@ function App() {
       <Layout>
       <Switch>
        <Route exact path={["/"]} component={Home} />
-       <Route exact path="/pickforme" component={Random}/>
+       <Route exact path='/pickforme' component={Random}/>
+       <Route exact path='/categories' component={Categories} />
      </Switch>
     </Layout>
       

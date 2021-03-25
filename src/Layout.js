@@ -16,6 +16,11 @@ function Layout(props) {
                     Random!
                 </Link>
                 </li>
+                <li>
+                <Link to={'/categories'} >
+                    Categories
+                </Link>
+                </li>
             </nav>
 
             <div className="main-page">{props.children}</div>
