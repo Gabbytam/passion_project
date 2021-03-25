@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import axios from 'axios';
 import {
     Grid,
     GridItem,
@@ -12,16 +13,43 @@ import {
     colorMode,
   } from "@chakra-ui/react";
 
+const urlStart = 'https://api.globalgiving.org/api/public/projectservice/';
+const api_key = 'bc212140-0729-4c60-a886-a9b73c05ea49';
 
-function Details({project}) {
+function Details({project, projectId}) {
+    useEffect(() => {
+        grabProjectInfo();
+
+    }, [])
+
+    const [chosenProject, setChosenProject] = useState('');
+
+    const grabProjectInfo = async () => {
+        try {
+            let newUrl = urlStart +'projects/' + projectId + '?api_key=' + api_key;
+            let result = await axios.get(newUrl);
+            console.log('chosen project', result.data.project);
+            setChosenProject(result.data.project);
+        } catch (err) {
+            console.log('axios single project call error', err);
+        }
+       
+    }
+
     return (
         <div>
-            <Box as='h1'>{project.title}</Box>
-            <GridItem justifySelf='center' alignSelf='center' background='pink' width='40%'>
+            {chosenProject &&
+            <Box>
+                <Box as='h1'>{chosenProject.title}</Box>
+                <GridItem justifySelf='center' alignSelf='center' background='pink' width='40%'>
 
-                <Image src={project.imageLink}/>
+                    <Image src={chosenProject.imageLink}/>
 
-            </GridItem>
+                </GridItem>
+            </Box>
+            
+            }
+            
             
             
             {/* <img src={project.imageLink}></img> */}

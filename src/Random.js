@@ -20,6 +20,7 @@ const api_key = 'bc212140-0729-4c60-a886-a9b73c05ea49';
 function Random() {
     const [projectData, setProjectData] = useState([]);
     const [chosenProject, setChosenProject] = useState('');
+    const [chosenProjectId, setChosenProjectId] = useState(0);
     const [seeDetails, setSeeDetails] = useState(false);
     const [buttonWords, setButtonWords] = useState(0);
     const showHideWords = ['See', 'Hide'];
@@ -47,15 +48,16 @@ function Random() {
 
             //go into result.data.projects.project and grab the id number of the project from the array of all the active projects 
             let projectId = result.data.projects.project[random].id;
+            setChosenProjectId(projectId);
+
+            //!!!! doing get project grab here instead of details page
             let newUrl = urlStart +'projects/' + projectId + '?api_key=' + api_key;
             let singleResult = await axios.get(newUrl);
             //console.log('chosen project', singleResult);
-            setChosenProject(singleResult.data.project);
-            let slotProjects = allResult.data.projects.project;
-            slotProjects.push(singleResult.data.project);
-            setProjectData(slotProjects);
-
-
+            // setChosenProject(singleResult.data.project);
+            // let slotProjects = allResult.data.projects.project;
+            // slotProjects.push(singleResult.data.project);
+            // setProjectData(slotProjects);
         } 
         catch(err) {
             console.log('axios call for projects error', err)
@@ -108,7 +110,7 @@ function Random() {
                 <Button onClick={(e) => runSlotMachine()}>Run</Button>
                 <Button onClick= {(e) => handleDetails()} w="10vw">{showHideWords[buttonWords]} Details</Button>
                 {seeDetails &&
-                    <Details project = {chosenProject}/>
+                    <Details project = {chosenProject} projectId = {chosenProjectId}/>
                 }
             </Grid>
             
