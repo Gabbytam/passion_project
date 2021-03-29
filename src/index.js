@@ -3,10 +3,17 @@ import ReactDOM from 'react-dom';
 import './css/index.css';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
-import { ChakraProvider } from "@chakra-ui/react"
+import { ChakraProvider, extendTheme } from "@chakra-ui/react"
+
+const theme = extendTheme({
+  fonts: {
+    heading: 'Raleway',
+    body: 'Raleway',
+  },
+});
 
 ReactDOM.render(
-  <ChakraProvider>
+  <ChakraProvider theme={theme}>
     <BrowserRouter>
       <App />
     </BrowserRouter>

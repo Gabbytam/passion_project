@@ -88,8 +88,8 @@ function Random() {
 
     return (
         <div>
-            <Grid background='orange' width='80vw' display='flex' flexDirection='column'>
-                <Box as='h1' fontSize='xxx-large'>We will pick a project for you</Box>
+            <Box as='h1' fontSize='xx-large' mt='4vh' mb='4vh'>We will pick a project for you</Box>
+            <Box background='orange' width='80vw' display='flex' flexDirection='column' justifyContent='center' alignItems='center'>
                 <Box width='50%' height='30vh' background='grey' borderRadius='25px'>
                     {!run ?
                         <Box>
@@ -105,15 +105,19 @@ function Random() {
                         </Box>
                     }
                     
-
                 </Box>
-                <Button onClick={(e) => runSlotMachine()}>Run</Button>
-                <Button onClick= {(e) => handleDetails()} w="10vw">{showHideWords[buttonWords]} Details</Button>
-                {seeDetails &&
-                    <Details project = {chosenProject} projectId = {chosenProjectId}/>
-                }
-            </Grid>
-            
+                <Button
+                width='10%'
+                onClick={(e) => runSlotMachine()}
+                >
+                Run
+                </Button>
+            </Box>
+
+            <Button onClick= {(e) => handleDetails()} w="10vw">{showHideWords[buttonWords]} Details</Button>
+            {seeDetails &&
+                <Details project = {chosenProject} projectId = {chosenProjectId}/>
+            }
 
         </div>
     )

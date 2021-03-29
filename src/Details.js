@@ -13,13 +13,15 @@ import {
     colorMode,
   } from "@chakra-ui/react";
 
+import { Icon } from '@iconify/react';
+import {FaMapMarkerAlt, FaMapMarkedAlt, FaMoneyBillAlt} from 'react-icons/fa';
+
 const urlStart = 'https://api.globalgiving.org/api/public/projectservice/';
 const api_key = 'bc212140-0729-4c60-a886-a9b73c05ea49';
 
-function Details({project, projectId}) {
+function Details({project, projectId, setOpen}) {
     useEffect(() => {
         grabProjectInfo();
-
     }, [])
 
     const [chosenProject, setChosenProject] = useState('');
@@ -36,29 +38,32 @@ function Details({project, projectId}) {
        
     }
 
+    console.log('project id from details page', projectId)
+
     return (
         <div>
             {chosenProject &&
-            <Box>
-                <Box as='h1'>{chosenProject.title}</Box>
-                <GridItem justifySelf='center' alignSelf='center' background='pink' width='40%'>
-
+            <Box background='pink' display='flex' flexDirection='column'>
+                <Box as='h1' fontSize='x-large'>{chosenProject.title}</Box>
+                
+                <Box><FaMapMarkedAlt/>{chosenProject.contactCity}, {chosenProject.contactCountry}</Box>
+                <Box display='flex'>
                     <Image src={chosenProject.imageLink}/>
+                    <Box as='p'>{chosenProject.summary}</Box>
+                </Box>
 
-                </GridItem>
+                <Box display='flex' justifyContent='space-evenly'>
+                    <Button><a href={chosenProject.projectLink} target='_blank'>Get the Details</a></Button>
+                    <Button><a href={chosenProject.contactUrl} target='_blank'>Check out their site</a></Button>
+                </Box>
+                <FaMoneyBillAlt/> {chosenProject.goal}
+                <Button onClick={() => setOpen(false)}>X</Button>
+
+                
             </Box>
             
             }
-            
-            
-            
-            {/* <img src={project.imageLink}></img> */}
-            <p>Description: {project.summary}</p>
-            <p>Location: {project.contactAddress} City: {project.contactCity} Country: {project.contactCountry}</p>
-            <p>Website: <a href={project.contactUrl}>{project.contactUrl}</a></p>
-            <p>Project Link: <a href={project.projectLink}>{project.projectLink}</a></p>
-            <p>Long Term Impact: {project.longTermImpact}</p>
-            <p>Donation Goal: {project.goal}</p>
+
         </div>
     )
 }

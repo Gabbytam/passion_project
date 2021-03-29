@@ -8,23 +8,24 @@ function Layout(props) {
 
     const bgColor = {
         // light: 'rgba(212, 221, 224)',
-        light: 'rgba(174, 198, 196)',
-        dark: '#013328',
+        light: 'rgba(207, 233, 175)',
+        dark: '#1A4645',
     };
 
     const navColor = {
-        // light: 'rgba(174, 198, 196)',
-        light: 'rgba(212, 221, 224)',
-        dark: 'rgba(207, 233, 175)',
+        light: 'rgba(230, 250, 175)',
+        dark: '#266867',
     }
-    //const textColor = { light: "blue.400", dark: "gray.100" };
-    const textColor = { light: "rgb(0, 0, 0)", dark: "gray.100" };
+    const textColor = { light: '#1A4645', dark: "gray.100" };
     const { colorMode, toggleColorMode } = useColorMode();
 
     return (
         <Box
+        color={textColor[colorMode]}
         bgColor={bgColor[colorMode]}
-        h='100%'>
+        h='100%'
+        minH='100vh'
+        >
             <Flex
             as="nav"
             align="center"
@@ -42,19 +43,15 @@ function Layout(props) {
                         <Image
                         h='10vh'
                         mt="0"
-                        src="../images/donation.png"
+                        // src="../images/donation.png"
+                        src="../images/donationOrange.png"
                         />
                     </Link>
                     </Heading>
                 </Flex>
-                {/* <Box>
-                    <Link to={'/'} >
-                        Home
-                    </Link>
-                </Box> */}
                 <Box>
                 <Link to={'/pickforme'} >
-                    Random!
+                    Randomize
                 </Link>
                 </Box>
                 <Box>

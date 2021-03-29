@@ -12,6 +12,7 @@ import {
     useColorMode,
     colorMode,
 } from "@chakra-ui/react";
+import { motion } from "framer-motion"
 
 import Details from './Details';
 
@@ -20,10 +21,25 @@ const api_key = 'bc212140-0729-4c60-a886-a9b73c05ea49';
 function Categories() {
     const [themes, setThemes] = useState([]);
     const [projectId, setProjectId] = useState(0);
+    const [open, setOpen] = useState(false);
+    const MotionBox = motion(Box);
 
     useEffect(() => {
         getThemes();
     }, [])
+
+    const boxColor = {
+        light: '#1A4645',
+        //light: 'rgba(230, 250, 175)',
+        dark: '#266867',
+    }
+
+    const boxTextColor = {
+        dark: 'white',
+        light: '#266867',
+    }
+
+    const { colorMode, toggleColorMode } = useColorMode();
 
     const getThemes = async () => {
         try {
@@ -42,7 +58,9 @@ function Categories() {
         //map through the themes and create a box for each 
         if(themes.length != 0) {
             return themes.map(theme => (
-                <GridItem width='20vw' height='15vh' padding='1em' background='yellow' onClick={(e) => displayProject(theme)}>{theme.name}</GridItem>
+                // <GridItem width='20vw' height='15vh' paddingRight='1em' paddingLeft='1em' borderWidth='10px' borderColor={boxColor[colorMode]} textColor={boxTextColor[colorMode]} borderRadius='3xl' display='flex' justifyContent='center' alignItems='center' onClick={(e) => displayProject(theme)}>{theme.name}</GridItem>
+                <MotionBox width='20vw' height='15vh' paddingRight='1em' paddingLeft='1em' borderWidth='10px' borderColor={boxColor[colorMode]} textColor={boxTextColor[colorMode]} borderRadius='3xl' display='flex' justifyContent='center' alignItems='center' whileHover={{ scale: 1.1 }} onClick={(e) => displayProject(theme)}>{theme.name}</MotionBox>
+                // <Button width='20vw' height='15vh' background='none' paddingRight='1em' paddingLeft='1em' borderWidth='10px' borderColor={boxColor[colorMode]} textColor={boxTextColor[colorMode]} borderRadius='3xl' display='flex' justifyContent='center' alignItems='center' onClick={(e) => displayProject(theme)}>{theme.name}</Button>
             ))
         }
     }
@@ -59,22 +77,29 @@ function Categories() {
         let chosenProjectId = theme.projects.project[randomIndex].id;
         console.log('project id', chosenProjectId)
         setProjectId(chosenProjectId);
+        setOpen(true);
     }
 
 
     return (
         <div>
-            <Box as='h1'>
-                Check out projects by category
+            <Box as='h1' fontSize='xx-large' mt='3vh'>
+                Check Out Projects By Their Category
             </Box>
             <Box as='p'>
-                Click on a category to select a project affiliated with that theme.
+                Click on a category to see an afflilated project.
             </Box>
-            <Grid templateColumns='repeat(4, 1fr)' templateRows='repeat(4, 1fr)' columnGap = {1} rowGap = {5} background='orange'>
-              {displayThemes()}
+            {open ? 
+            <MotionBox><Details projectId = {projectId} setOpen={setOpen}/></MotionBox>
+            
+            :
+            <Grid templateColumns='repeat(4, 1fr)' templateRows='repeat(4, 1fr)' columnGap = {3} rowGap = {5} mt='5vh' mb='5vh'>
+                {displayThemes()}
             </Grid>
+            }
+            
             {/* have a popup window with the project details page */}
-            <Details projectId = {projectId}/>
+            
         </div>
     )
 }

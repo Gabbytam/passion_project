@@ -1,5 +1,6 @@
 import React from 'react';
 import {Switch, Route} from 'react-router-dom';
+import { ThemeProvider, theme, CSSReset } from '@chakra-ui/react';
 
 import './css/App.css';
 
@@ -10,15 +11,21 @@ import Random from './Random';
 import Categories from './Categories';
 
 function App() {
+
+  
   return (
     <div className="App">
-      <Layout>
-      <Switch>
-       <Route exact path={["/"]} component={Home} />
-       <Route exact path='/pickforme' component={Random}/>
-       <Route exact path='/categories' component={Categories} />
-     </Switch>
-    </Layout>
+      <ThemeProvider theme={theme}>
+        <CSSReset/>
+        <Layout>
+          <Switch>
+          <Route exact path={["/"]} component={Home} />
+          <Route exact path='/pickforme' component={Random}/>
+          <Route exact path='/categories' component={Categories} />
+        </Switch>
+        </Layout>
+      </ThemeProvider>
+      
       
     </div>
   );
